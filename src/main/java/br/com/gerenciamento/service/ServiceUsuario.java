@@ -28,7 +28,14 @@ public class ServiceUsuario {
         usuarioRepository.save(user);
     }
 
-    public Usuario loginUser(String user, String senha) {
-        return usuarioRepository.buscarLogin(user, senha);
+    public Usuario loginUser(String email, String senha) throws NoSuchAlgorithmException {
+        String senhaCriptografada = Util.md5(senha);
+
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario != null && usuario.getSenha().equals(senhaCriptografada)) {
+            return usuario;
+        }
+        return null;
     }
 }
